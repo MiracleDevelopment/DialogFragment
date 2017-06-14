@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 
-
 class FragmentDialog : DialogFragment() {
-    var tvHeader: TextView? = null
+    lateinit var tvHeader: TextView
     var tvMessage: TextView? = null
     var btCancel: Button? = null
     var btSummit: Button? = null
@@ -40,9 +39,15 @@ class FragmentDialog : DialogFragment() {
         tvMessage = view.findViewById(R.id.tv_discription) as TextView
         btCancel = view.findViewById(R.id.bt_cancel) as Button
         btSummit = view.findViewById(R.id.bt_summit) as Button
-        dialogClickListener = context as DialogOnClickListener
 
-        tvHeader?.text = header
+        if (parentFragment != null) {
+            dialogClickListener = parentFragment as DialogOnClickListener
+        } else {
+            dialogClickListener = activity as DialogOnClickListener
+        }
+
+
+        tvHeader.text = header
         tvMessage?.text = Msg
 
 
@@ -70,9 +75,9 @@ class FragmentDialog : DialogFragment() {
         Msg = saveInstanceState?.getString("dialog_msg")
     }
 
-    fun onRestorenonInstanceState(bundel: Bundle?) {
-        header = bundel?.getString("dialog_header")
-        Msg = bundel?.getString("dialog_msg")
+    fun onRestorenonInstanceState(bundle: Bundle?) {
+        header = bundle?.getString("dialog_header")
+        Msg = bundle?.getString("dialog_msg")
     }
 
     interface DialogOnClickListener {

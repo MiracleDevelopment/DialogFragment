@@ -1,9 +1,11 @@
 package com.dev.ipati.fragmentdialog
 
 
+import android.app.Dialog
 import android.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -28,11 +30,29 @@ class MainActivity : AppCompatActivity(), FragmentDialog.DialogOnClickListener {
 //        traction.replace(R.id.frame_fragment_dialog, fragmentDialog)
 //        traction.commit()
         btDialog?.setOnClickListener({ view ->
+//            val fragment = FragmentDialog.newInstance("1","").apply {
+//                Msg =
+//            }
             val fragmentDialog: FragmentDialog = FragmentDialog.Builder().headingDialog("HeaderDialogFragment")
                     .descriptionDialog("I'am Fragment Dialog Kotlin").builder()
             fragmentDialog.isCancelable = false
             fragmentDialog.show(supportFragmentManager, "fragmentDialog")
         })
 
+//        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(applicationContext)
+//        alertDialog.setCancelable(false)
+//        alertDialog.setTitle("SupportDialog")
+//        alertDialog.setPositiveButton("OK", { dialog, _ ->
+//            dialog.dismiss()
+//        })
+//
+//        alertDialog.setNegativeButton("CanCel", { dialog, _ ->
+//            dialog.dismiss()
+//        })
+//
+//        val dialog: Dialog = alertDialog.create()
+//        dialog.show()
     }
+
+
 }
