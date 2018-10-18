@@ -28,8 +28,8 @@ class FragmentDialog : DialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater!!.inflate(R.layout.activity_fragment_dialog, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view: View = inflater.inflate(R.layout.activity_fragment_dialog, container, false)
         initInstance(view)
         return view
     }
@@ -63,11 +63,10 @@ class FragmentDialog : DialogFragment() {
         })
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putString("dialog_header", header)
-        outState?.putString("dialog_msg", Msg)
-
+        outState.putString("dialog_header", header)
+        outState.putString("dialog_msg", Msg)
     }
 
     fun onRestoreInstanceState(saveInstanceState: Bundle?) {

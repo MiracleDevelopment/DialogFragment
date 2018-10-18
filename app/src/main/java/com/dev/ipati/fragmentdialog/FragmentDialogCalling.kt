@@ -7,7 +7,7 @@ import android.view.View
 
 class FragmentDialogCalling : Fragment() {
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val fragmentDialog: FragmentDialog = FragmentDialog.Builder().headingDialog("HelloFragmentDialog")
