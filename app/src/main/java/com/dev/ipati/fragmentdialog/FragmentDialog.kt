@@ -1,117 +1,118 @@
 package com.dev.ipati.fragmentdialog
 
-
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_fragment_dialog.*
 
 class FragmentDialog : DialogFragment() {
-    lateinit var tvHeader: TextView
-    var tvMessage: TextView? = null
-    var btCancel: Button? = null
-    var btSummit: Button? = null
-    var header: String? = "HelloDialogFragment"
-    var Msg: String? = "I'am DialogFragment"
+
+    var header: String? = DEFAULT_DIALOG_HEADER
+    var message: String? = DEFAULT_DIALOG_MESSAGE
 
     var dialogClickListener: DialogOnClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            onRestoreInstanceState(arguments)
+            arguments?.let(this::onInitInstance)
         } else {
-            onRestorenonInstanceState(savedInstanceState)
+            onRestoreInstanceState(savedInstanceState)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.activity_fragment_dialog, container, false)
-        initInstance(view)
-        return view
+        return inflater.inflate(R.layout.activity_fragment_dialog, container, false)
     }
 
-    private fun initInstance(view: View) {
-        tvHeader = view.findViewById(R.id.tv_header) as TextView
-        tvMessage = view.findViewById(R.id.tv_discription) as TextView
-        btCancel = view.findViewById(R.id.bt_cancel) as Button
-        btSummit = view.findViewById(R.id.bt_summit) as Button
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initInstance()
+    }
 
-        if (parentFragment != null) {
-            dialogClickListener = parentFragment as DialogOnClickListener
+    private fun initInstance() {
+        dialogClickListener = if (parentFragment != null) {
+            parentFragment as DialogOnClickListener
         } else {
-            dialogClickListener = activity as DialogOnClickListener
+            activity as DialogOnClickListener
         }
 
-
         tvHeader.text = header
-        tvMessage?.text = Msg
+        tvDescription.text = message
 
-
-
-        btSummit?.setOnClickListener({ view ->
-            dialogClickListener?.OnDialogPositiveClickListener(view)
+        btSubmit.setOnClickListener { view ->
+            dialogClickListener?.onDialogPositiveClickListener(view)
             dismiss()
-        })
+        }
 
-        btCancel?.setOnClickListener({ view ->
-            dialogClickListener?.OnDialogNegativeClickListener(view)
+        btCancel?.setOnClickListener { view ->
+            dialogClickListener?.onDialogNegativeClickListener(view)
             dismiss()
-        })
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("dialog_header", header)
-        outState.putString("dialog_msg", Msg)
+        outState.putString(ARGS_HEADER, header)
+        outState.putString(ARGS_MESSAGE, message)
     }
 
-    fun onRestoreInstanceState(saveInstanceState: Bundle?) {
-        header = saveInstanceState?.getString("dialog_header")
-        Msg = saveInstanceState?.getString("dialog_msg")
+    private fun onInitInstance(arguments: Bundle) {
+        header = arguments.getString(ARGS_HEADER)
+        message = arguments.getString(ARGS_MESSAGE)
     }
 
-    fun onRestorenonInstanceState(bundle: Bundle?) {
-        header = bundle?.getString("dialog_header")
-        Msg = bundle?.getString("dialog_msg")
+    private fun onRestoreInstanceState(bundle: Bundle?) {
+        header = bundle?.getString(ARGS_HEADER)
+        message = bundle?.getString(ARGS_MESSAGE)
     }
 
     interface DialogOnClickListener {
-        fun OnDialogPositiveClickListener(v: View?)
-        fun OnDialogNegativeClickListener(v: View?)
+        fun onDialogPositiveClickListener(v: View)
+        fun onDialogNegativeClickListener(v: View)
     }
 
     companion object {
         fun newInstance(header: String, Msg: String): FragmentDialog {
-            val fragmentDialog: FragmentDialog = FragmentDialog()
-            val bundle: Bundle = Bundle()
-            bundle.putString("dialog_header", header)
-            bundle.putString("dialog_msg", Msg)
+            val fragmentDialog = FragmentDialog()
+            val bundle = Bundle().apply {
+                putString(ARGS_HEADER, header)
+                putString(ARGS_MESSAGE, Msg)
+            }
             fragmentDialog.arguments = bundle
             return fragmentDialog
         }
     }
 
-    open class Builder {
-        var headerDialog: String? = null
-        var descriptionDialog: String? = null
+    class Builder {
+        var header: String? = null
+        var message: String? = null
 
-        fun headingDialog(header: String): Builder {
-            headerDialog = header
+        fun header(text: String): Builder {
+            this.header = text
             return this
         }
 
-        fun descriptionDialog(msg: String): Builder {
-            descriptionDialog = msg
+        fun message(text: String): Builder {
+            this.message = text
             return this
         }
 
         fun build(): FragmentDialog {
-            return FragmentDialog.newInstance(headerDialog!!, descriptionDialog!!)
+            val header = this.header
+                ?: throw NullPointerException("You must define header")
+            val description = this.message
+                ?: throw NullPointerException("You must define message")
+
+            return FragmentDialog.newInstance(header, description)
         }
     }
 
 }
+
+private const val ARGS_HEADER: String = "dialog_header"
+private const val ARGS_MESSAGE: String = "dialog_message"
+private const val DEFAULT_DIALOG_HEADER = "HelloDialogFragment"
+private const val DEFAULT_DIALOG_MESSAGE = "I'm a DialogFragment"
