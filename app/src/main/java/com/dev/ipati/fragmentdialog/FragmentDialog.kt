@@ -109,7 +109,7 @@ class FragmentDialog : DialogFragment() {
             return this
         }
 
-        fun builder(): FragmentDialog {
+        fun build(): FragmentDialog {
             return FragmentDialog.newInstance(headerDialog!!, descriptionDialog!!)
         }
     }
