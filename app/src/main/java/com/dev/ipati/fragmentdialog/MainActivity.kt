@@ -1,11 +1,8 @@
 package com.dev.ipati.fragmentdialog
 
 
-import android.app.Dialog
-import android.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -34,7 +31,7 @@ class MainActivity : AppCompatActivity(), FragmentDialog.DialogOnClickListener {
 //                Msg =
 //            }
             val fragmentDialog: FragmentDialog = FragmentDialog.Builder().headingDialog("HeaderDialogFragment")
-                    .descriptionDialog("I'am Fragment Dialog Kotlin").builder()
+                    .descriptionDialog("I'am Fragment Dialog Kotlin").build()
             fragmentDialog.isCancelable = false
             fragmentDialog.show(supportFragmentManager, "fragmentDialog")
         })
