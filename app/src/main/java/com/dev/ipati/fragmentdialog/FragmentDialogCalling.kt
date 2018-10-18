@@ -10,8 +10,8 @@ class FragmentDialogCalling : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val fragmentDialog: FragmentDialog = FragmentDialog.Builder()
-            .headingDialog("HelloFragmentDialog")
-            .descriptionDialog("I'm Fragment Dialog")
+            .header("HelloFragmentDialog")
+            .message("I'm Fragment Dialog")
             .build()
 
         fragmentDialog.show(childFragmentManager, "")

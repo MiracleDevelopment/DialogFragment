@@ -7,7 +7,7 @@
     tools:context="com.dev.ipati.fragmentdialog.MainActivity">
 
     <Button
-        android:id="@+id/bt_dialog"
+        android:id="@+id/btDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
