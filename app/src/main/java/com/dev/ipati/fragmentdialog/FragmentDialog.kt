@@ -87,27 +87,18 @@ class FragmentDialog : DialogFragment() {
     }
 
     class Builder {
-        var header: String? = null
-        var message: String? = null
 
-        fun header(text: String): Builder {
-            this.header = text
-            return this
-        }
+        private var header: String? = null
+        private var message: String? = null
 
-        fun message(text: String): Builder {
-            this.message = text
-            return this
-        }
+        fun header(header: String) = apply { this.header = header }
 
-        fun build(): FragmentDialog {
-            val header = this.header
-                ?: throw NullPointerException("You must define header")
-            val description = this.message
-                ?: throw NullPointerException("You must define message")
+        fun message(message: String) = apply { this.message = message }
 
-            return FragmentDialog.newInstance(header, description)
-        }
+        fun build() = FragmentDialog.newInstance(
+                header = header ?: throw NullPointerException("Header must not be null."),
+                Msg = message ?: throw NullPointerException("Message must not be null.")
+        )
     }
 
 }
