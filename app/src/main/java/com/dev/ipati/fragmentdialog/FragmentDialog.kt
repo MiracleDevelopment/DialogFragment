@@ -2,6 +2,7 @@ package com.dev.ipati.fragmentdialog
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,6 @@ class FragmentDialog : DialogFragment() {
 
     var header: String? = DEFAULT_DIALOG_HEADER
     var message: String? = DEFAULT_DIALOG_MESSAGE
-
-    var dialogClickListener: DialogOnClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,22 +32,16 @@ class FragmentDialog : DialogFragment() {
     }
 
     private fun initInstance() {
-        dialogClickListener = if (parentFragment != null) {
-            parentFragment as DialogOnClickListener
-        } else {
-            activity as DialogOnClickListener
-        }
-
         tvHeader.text = header
         tvDescription.text = message
 
         btSubmit.setOnClickListener { view ->
-            dialogClickListener?.onDialogPositiveClickListener(view)
+            delegate<DialogOnClickListener>()?.onDialogPositiveClickListener(view)
             dismiss()
         }
 
         btCancel?.setOnClickListener { view ->
-            dialogClickListener?.onDialogNegativeClickListener(view)
+            delegate<DialogOnClickListener>()?.onDialogNegativeClickListener(view)
             dismiss()
         }
     }
@@ -67,6 +60,13 @@ class FragmentDialog : DialogFragment() {
     private fun onRestoreInstanceState(bundle: Bundle?) {
         header = bundle?.getString(ARGS_HEADER)
         message = bundle?.getString(ARGS_MESSAGE)
+    }
+
+    private inline fun <reified T> Fragment.delegate(): T? = when {
+        targetFragment is T -> targetFragment as T
+        parentFragment is T -> parentFragment as T
+        activity is T -> activity as T
+        else -> null
     }
 
     interface DialogOnClickListener {
